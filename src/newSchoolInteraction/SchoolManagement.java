@@ -60,29 +60,11 @@ public class SchoolManagement {
 					case "2": // view teachers info
 						if (school.getTeachers().size() > 0) {
 							System.out.println(
-									"Whose information do you want to view? (Enter the ID of the Teacher you want to find)");
-							int teacherIndex = school.findTeacherID(sc.next().toUpperCase());
+									"Whose information do you want to view? (Enter the name of the Teacher you want to find)");
+							
+							System.out.println(school.getTeacherInformation(sc.next()));
 							sc.nextLine();
-							System.out.println(teacherIndex);
-							if (teacherIndex >= 0) {
-								System.out.println("Name:\t" + school.getTeachers().get(teacherIndex).getName());
-								System.out.println(
-										"Birth date:\t" + school.getTeachers().get(teacherIndex).getBirthDate());
-								System.out.println("Dni:\t" + school.getTeachers().get(teacherIndex).getDni());
-								System.out.println(
-										"Phone number:\t " + school.getTeachers().get(teacherIndex).getTelephone());
-								System.out.println("Salary:\t " + school.getTeachers().get(teacherIndex).getSalary());
-								System.out.println(
-										"Joined date:\t" + school.getTeachers().get(teacherIndex).getJoinedDate());
-								// why isTutor returns a string instead of boolean
-								if (school.getTeachers().get(teacherIndex).isTutor().matches("true"))
-									System.out
-											.println("Tutor of:\t" + school.getTeachers().get(teacherIndex).getTutor());
-								for (int i = 0; i < school.getTeachers().get(teacherIndex).getSubjects().size(); i++)
-									System.out.println("Subjects:\t"
-											+ school.getTeachers().get(teacherIndex).getSubjects().get(i));
-							} else
-								System.out.println("Wrong teacher ID");
+							
 						} else
 							System.out.println("There's no Teacher created yet.");
 						break;
@@ -336,6 +318,7 @@ public class SchoolManagement {
 
 						// add the teacher to the school
 						school.addTeacher(teacher);
+						school.setTeachers(school.orderTeachers());
 						// print the created ID for the teacher
 						System.out.println("The ID of " + teacher.getName() + " is " + teacher.getTeacherID());
 						break;
@@ -375,7 +358,7 @@ public class SchoolManagement {
 				while (studentsRepeat) {
 					System.out.println("Welcome to Students management option. What do you want?");
 					System.out.println(
-							" 1- List students IDs\n 2- View Information\n 3- Modify Information\n 4- Delete Information\n 5- New Student\n 6- Tutor\n7- Get Teacher By Student\n 0- Go back");
+							" 1- List students IDs\n 2- View Information\n 3- Modify Information\n 4- Delete Information\n 5- New Student\n 6- Tutor\n 7- Get Teacher by student\n 0- Go back");
 					String studentOption = sc.next();
 					sc.nextLine();
 					switch (studentOption) {
@@ -571,14 +554,14 @@ public class SchoolManagement {
 					case "4": // delete info
 						if (school.getStudents().size() > 0) {
 							System.out.println(
-									"Whose information do you want to delete? (Enter the ID of the Student you want to find)");
+									"Whose information do you want to delete? (Enter the name of the Student you want to find)");
 							int studentIndex = school.findStudentID(sc.next().toUpperCase());
 							sc.nextLine();
 							if (studentIndex >= 0) {
 								school.deleteTeacher(school.getStudents().get(studentIndex).getName());
 								System.out.println("Done.");
 							} else
-								System.out.println("Wrong student ID");
+								System.out.println("Wrong student name");
 						} else
 							System.out.println("There's no Student created yet.");
 						break;
@@ -692,6 +675,7 @@ public class SchoolManagement {
 						 */
 						// add the student to the school
 						school.addStudent(student);
+						school.setStudents(school.orderStudents());
 						// print the created ID for the student
 						System.out.println("The ID of " + student.getName() + " is " + student.getStudentID());
 						break;
@@ -768,31 +752,14 @@ public class SchoolManagement {
 						if (school.getAdministratives().size() > 0) {
 							System.out.println(
 									"Whose information do you want to view? (Enter the ID of the Administrative you want to find)");
-							int administrativeIndex = school.findAdministrativeID(sc.next().toUpperCase());
+							
+							System.out.println(school.getAdministrativeInformation(sc.next()));
 							sc.nextLine();
-							System.out.println(administrativeIndex);
-							if (administrativeIndex >= 0) {
-								System.out.println(
-										"Name:\t" + school.getAdministratives().get(administrativeIndex).getName());
-								System.out.println("Birth date:\t"
-										+ school.getAdministratives().get(administrativeIndex).getBirthDate());
-								System.out.println(
-										"Dni:\t" + school.getAdministratives().get(administrativeIndex).getDni());
-								System.out.println("Phone number:\t "
-										+ school.getAdministratives().get(administrativeIndex).getTelephone());
-								System.out.println("Salary:\t "
-										+ school.getAdministratives().get(administrativeIndex).getSalary());
-								System.out.println("Joined date:\t"
-										+ school.getAdministratives().get(administrativeIndex).getJoinedDate());
-								if (school.getAdministratives().get(administrativeIndex).getLanguages().size() > 0)
-									for (int i = 0; i < school.getAdministratives().get(administrativeIndex)
-											.getLanguages().size(); i++)
-										System.out.println(school.getAdministratives().get(administrativeIndex)
-												.getLanguages().get(i));
-							} else
-								System.out.println("Wrong administrative ID");
+					
 						} else
 							System.out.println("There's no Administrative created yet.");
+							
+							
 						break;
 					case "3":// modify information
 						if (school.getAdministratives().size() > 0) {
@@ -924,7 +891,7 @@ public class SchoolManagement {
 							System.out.println("There's no Administrative created yet.");
 						break;
 					case "5": // new administrative
-						System.out.println("*NEW TEACHER*");
+						System.out.println("*NEW ADMINISTRATIVE*");
 						Administrative administrative = new Administrative();
 						// name
 						System.out.println("Name:");
@@ -1004,7 +971,7 @@ public class SchoolManagement {
 
 						// languages
 						System.out.println("Languages:");
-						System.out.println("How many languages are you teaching now?");
+						System.out.println("How many languages do you know?");
 						int numberOfLanguages = sc.nextInt();
 						for (int i = 0; i < numberOfLanguages; i++) {
 							System.out.println("enter one language");
@@ -1015,6 +982,7 @@ public class SchoolManagement {
 
 						// add the administrative to the school
 						school.addAdministrative(administrative);
+						school.setAdministratives(school.orderAdministratives());
 						System.out.println("The ID of " + administrative.getName() + " is "
 								+ administrative.getAdministrativeID());
 					}
